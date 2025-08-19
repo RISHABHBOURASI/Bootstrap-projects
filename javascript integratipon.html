@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Task Manager</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">Task Manager</a>
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+
+        <!-- Add Task Form -->
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white">Add New Task</div>
+          <div class="card-body">
+            <form id="taskForm">
+              <div class="input-group">
+                <input type="text" id="taskInput" class="form-control" placeholder="Enter task..." required>
+                <button class="btn btn-success" type="submit">Add</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Task List -->
+        <div class="card shadow-sm mt-4">
+          <div class="card-header bg-secondary text-white">Your Tasks</div>
+          <ul class="list-group list-group-flush" id="taskList"></ul>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS + Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Custom JS -->
+  <script>
+    const taskForm = document.getElementById('taskForm');
+    const taskInput = document.getElementById('taskInput');
+    const taskList = document.getElementById('taskList');
+
+    // Add Task
+    taskForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const taskText = taskInput.value.trim();
+      if(taskText === "") return;
+
+      const li = document.createElement('li');
+      li.className = "list-group-item d-flex justify-content-between align-items-center";
+      li.innerHTML = `
+        <span>${taskText}</span>
+        <div>
+          <button class="btn btn-sm btn-warning me-2 editBtn">Edit</button>
+          <button class="btn btn-sm btn-danger deleteBtn">Delete</button>
+        </div>
+      `;
+      taskList.appendChild(li);
+      taskInput.value = "";
+    });
+
+    // Handle Edit & Delete
+    taskList.addEventListener('click', function(e) {
+      if(e.target.classList.contains('deleteBtn')) {
+        e.target.closest('li').remove();
+      }
+      if(e.target.classList.contains('editBtn')) {
+        const taskTextElement = e.target.closest('li').querySelector('span');
+        const newTask = prompt("Edit Task:", taskTextElement.textContent);
+        if(newTask !== null && newTask.trim() !== "") {
+          taskTextElement.textContent = newTask;
+        }
+      }
+    });
+  </script>
+</body>
+</html>
